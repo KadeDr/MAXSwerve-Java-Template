@@ -4,9 +4,15 @@
 
 package frc.robot;
 
+import java.io.PrintStream;
+
+import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.OIConstants;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -16,8 +22,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
+  
+  // private Camera m_robotcCamera;
   private RobotContainer m_robotContainer;
+  private final PS5Controller m_armController = new PS5Controller(OIConstants.kArmControllerPort);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -28,6 +36,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    // m_robotcCamera = new Camera();
+    // m_robotcCamera.InitializeCamera();
   }
 
   /**
@@ -44,6 +54,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    // m_robotcCamera.CameraRobotPeriodic();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -88,7 +99,63 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    boolean l1 = m_armController.getL1Button();
+    boolean r1 = m_armController.getR1Button();
+    boolean l2 = m_armController.getL2Button();
+    boolean r2 = m_armController.getR2Button();
+    boolean triangle = m_armController.getTriangleButton();
+    boolean cross = m_armController.getCrossButton();
+    boolean circle = m_armController.getCircleButton();
+    int pov = m_armController.getPOV();
+
+    double leftX = -m_robotContainer.m_driverController.getLeftX();
+    double leftY = -m_robotContainer.m_driverController.getLeftY();
+    double rightX = -m_robotContainer.m_driverController.getRightX();
+    boolean a = m_robotContainer.m_driverController.getAButton();
+
+    // m_robotcCamera.CameraTeleopPeriodic(leftY, leftX, rightX, a, m_robotContainer);
+
+    if (l1) {
+      m_robotContainer.SetAlgaeState(0.25);
+    }
+    else if (pov == 270) {
+      m_robotContainer.SetAlgaeState(-0.25);
+    }
+    else {
+      m_robotContainer.SetAlgaeState(0);
+    }
+
+    if (r1) {
+      m_robotContainer.SetElevatorState(0.3);
+    }
+    else if (pov == 90) {
+      m_robotContainer.SetElevatorState(-0.3);
+    }
+    else {
+      m_robotContainer.SetElevatorState(0);
+    }
+
+    if (triangle) {
+      m_robotContainer.SetElevatorSpin(0.1);
+    }
+    else if (cross) {
+      m_robotContainer.SetElevatorSpin(-0.1);
+    }
+    else {
+      m_robotContainer.SetElevatorSpin(0);
+    }
+
+    if (pov == 0) {
+      m_robotContainer.SetAlgaeSpin(-1);
+    }
+    else if (pov == 180) {
+      m_robotContainer.SetAlgaeSpin(1);
+    }
+    else {
+      m_robotContainer.SetAlgaeSpin(0);
+    }
+  }
 
   @Override
   public void testInit() {
