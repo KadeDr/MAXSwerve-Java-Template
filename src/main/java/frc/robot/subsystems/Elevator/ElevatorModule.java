@@ -1,7 +1,5 @@
 package frc.robot.subsystems.Elevator;
 
-import java.lang.module.Configuration;
-
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;

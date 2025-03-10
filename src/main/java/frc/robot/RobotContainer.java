@@ -5,36 +5,17 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsytem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import java.util.List;
-import java.util.TimerTask;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.events.EventTrigger;
@@ -53,10 +34,60 @@ public class RobotContainer {
 
   // The driver's controller
   public XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  CommandXboxController m_armController = new CommandXboxController(OIConstants.kArmControllerPort);
+  XboxController m_armController = new XboxController(OIConstants.kArmControllerPort);
 
   // Autonomous Vars
   private final SendableChooser<Command> autoChooser;
+
+  public void Arm() {
+    boolean l1 = m_armController.getLeftBumperButton();
+    boolean r1 = m_armController.getRightBumperButton();
+    boolean triangle = m_armController.getYButton();
+    boolean cross = m_armController.getAButton();
+    int pov = m_armController.getPOV();
+
+    // m_robotcCamera.CameraTeleopPeriodic(leftY, leftX, rightX, a, m_robotContainer);
+
+    if (l1) {
+      SetAlgaeState(0.25);
+    }
+    else if (pov == 270) {
+      SetAlgaeState(-0.25);
+    }
+    else {
+      SetAlgaeState(0);
+    }
+
+    if (r1) {
+      SetElevatorState(0.3);
+    }
+    else if (pov == 90) {
+      SetElevatorState(-0.3);
+    }
+    else {
+      SetElevatorState(0);
+    }
+
+    if (triangle) {
+      SetElevatorSpin(0.1);
+    }
+    else if (cross) {
+      SetElevatorSpin(-0.1);
+    }
+    else {
+      SetElevatorSpin(0);
+    }
+
+    if (pov == 0) {
+      SetAlgaeSpin(-1);
+    }
+    else if (pov == 180) {
+      SetAlgaeSpin(1);
+    }
+    else {
+      SetAlgaeSpin(0);
+    }
+  }
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -77,11 +108,17 @@ public class RobotContainer {
                 true),
             m_robotDrive));
 
-    new EventTrigger("Raise").onTrue(new InstantCommand(() -> m_robotElevator.MoveElevator(-0.5)));
-    new EventTrigger("Stop").onTrue(new InstantCommand(() -> m_robotElevator.MoveElevator(0)));
-    new EventTrigger("Lower").onTrue(new InstantCommand(() -> m_robotElevator.MoveElevator(0.5)));
-    new EventTrigger("Outtake").onTrue(new InstantCommand(() -> m_robotElevator.SpinElevator(0.1)));
-    new EventTrigger("Stop Spin").onTrue(new InstantCommand(() -> m_robotElevator.SpinElevator(0)));
+    new EventTrigger("Raise").onTrue(m_robotElevator.MoveElevatorCommand(-0.5));
+    new EventTrigger("Stop").onTrue(m_robotElevator.MoveElevatorCommand(0));
+    new EventTrigger("Lower").onTrue(m_robotElevator.MoveElevatorCommand(0.5));
+    new EventTrigger("Outtake").onTrue(m_robotElevator.SpinElevatorCommand(0.5));
+    new EventTrigger("Stop Spin").onTrue(m_robotElevator.SpinElevatorCommand(0));
+
+    // new EventTrigger("Raise").whileTrue(new InstantCommand(() -> m_robotElevator.MoveElevator(-0.5)));
+    // new EventTrigger("Stop").whileTrue(new InstantCommand(() -> m_robotElevator.MoveElevator(0)));
+    // new EventTrigger("Lower").whileTrue(new InstantCommand(() -> m_robotElevator.MoveElevator(0.5)));
+    // new EventTrigger("Outtake").whileTrue(new InstantCommand(() -> m_robotElevator.SpinElevator(0.1)));
+    // new EventTrigger("Stop Spin").whileTrue(new InstantCommand(() -> m_robotElevator.SpinElevator(0)));
 
     // new EventTrigger("Elevator").onTrue(Commands.sequence(
     //   Commands.parallel(

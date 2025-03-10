@@ -24,7 +24,9 @@ public final class Configs {
                 public static final SparkMaxConfig spinConfig = new SparkMaxConfig();
 
                 static {
+                        @SuppressWarnings("unused")
                         double positionFactor = 1 / ElevatorConstants.kEncoderRotationsPerInch;
+                        @SuppressWarnings("unused")
                         double velocityFactor = ElevatorConstants.kMaxSpeedInchesPerSecond;
 
                         mainConfig

@@ -1,12 +1,8 @@
 package frc.robot.subsystems;
 
-import java.util.TimerTask;
-
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Elevator.ElevatorModule;
-import frc.robot.subsystems.Elevator.ElevatorModuleState;
 import frc.robot.Constants.ElevatorConstants;
 
 public class ElevatorSubsytem extends SubsystemBase {
@@ -18,6 +14,22 @@ public class ElevatorSubsytem extends SubsystemBase {
 
     public void SpinElevator(double speed) {
         m_elevator.SetSpinState(speed);
+    }
+
+    public Command MoveElevatorCommand(double speed) {
+        return run(
+            () -> {
+                m_elevator.SetDesiredState(speed);
+            }
+        );
+    }
+
+    public Command SpinElevatorCommand(double speed) {
+        return run(
+            () -> {
+                m_elevator.SetSpinState(speed);
+            }
+        );
     }
 
     // private boolean finished;
