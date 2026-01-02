@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.FeedbackSensor;
+import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.ModuleConstants;
@@ -35,12 +36,16 @@ public final class Configs {
             turningConfig
                     .idleMode(IdleMode.kBrake)
                     .smartCurrentLimit(20);
+
             turningConfig.absoluteEncoder
                     // Invert the turning encoder, since the output shaft rotates in the opposite
                     // direction of the steering motor in the MAXSwerve Module.
                     .inverted(true)
                     .positionConversionFactor(turningFactor) // radians
-                    .velocityConversionFactor(turningFactor / 60.0); // radians per second
+                    .velocityConversionFactor(turningFactor / 60.0) // radians per second
+                    // This applies to REV Through Bore Encoder V2 (use REV_ThroughBoreEncoder for V1):
+                    .apply(AbsoluteEncoderConfig.Presets.REV_ThroughBoreEncoderV2);
+
             turningConfig.closedLoop
                     .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
                     // These are example gains you may need to them for your own robot!
