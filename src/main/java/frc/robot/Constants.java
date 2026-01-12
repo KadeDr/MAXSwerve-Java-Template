@@ -22,6 +22,26 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final class OIConstants {
+    public static final int kDriverControllerPort = 0;
+    public static final int kArmControllerPort = 1;
+    public static final double kDriveDeadband = 0.05;
+  }
+
+  public static final class AlgaeConstants {
+    public static final int kSparkCANid = 12, kFlexCANId = 13;
+  }
+
+  public static final class ElevatorConstants {
+    public static final int kLeftCANId = 9, kRightCANId = 10, kIntakeCANId = 11;
+    public static final double kMaxHeightInches = 24.75,
+      kGearRatio = 12.0,
+      kChurroDiameterInches = 0.5,
+      kEncoderRotationsPerInch = 0.16,
+      kMaxRPM = 5676,
+      kMaxSpeedInchesPerSecond = (kMaxRPM / kGearRatio) * kChurroDiameterInches * Math.PI / 60;
+  }
+
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -30,7 +50,11 @@ public final class Constants {
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     // Chassis configuration
+<<<<<<< HEAD
     public static final double kTrackWidth = Units.inchesToMeters(25);
+=======
+    public static final double kTrackWidth = Units.inchesToMeters(4);
+>>>>>>> df22047ee764779ca0535e960d0a4cff0f2ada11
     // Distance between centers of right and left wheels on robot
     public static final double kWheelBase = Units.inchesToMeters(25);
     // Distance between front and back wheels on robot
@@ -47,6 +71,7 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // SPARK MAX CAN IDs
+<<<<<<< HEAD
     public static final int kFrontLeftDrivingCanId = 2;
     public static final int kRearLeftDrivingCanId = 4;
     public static final int kFrontRightDrivingCanId = 8;
@@ -56,6 +81,17 @@ public final class Constants {
     public static final int kRearLeftTurningCanId = 3;
     public static final int kFrontRightTurningCanId = 7;
     public static final int kRearRightTurningCanId = 5;
+=======
+    public static final int kFrontLeftDrivingCanId = 3;
+    public static final int kRearLeftDrivingCanId = 5;
+    public static final int kFrontRightDrivingCanId = 1;
+    public static final int kRearRightDrivingCanId = 7;
+
+    public static final int kFrontLeftTurningCanId = 4;
+    public static final int kRearLeftTurningCanId = 6;
+    public static final int kFrontRightTurningCanId = 2;
+    public static final int kRearRightTurningCanId = 8;
+>>>>>>> df22047ee764779ca0535e960d0a4cff0f2ada11
 
     public static final boolean kGyroReversed = false;
   }
@@ -77,13 +113,8 @@ public final class Constants {
         / kDrivingMotorReduction;
   }
 
-  public static final class OIConstants {
-    public static final int kDriverControllerPort = 0;
-    public static final double kDriveDeadband = 0.05;
-  }
-
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxSpeedMetersPerSecond = 4;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;

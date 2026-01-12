@@ -57,4 +57,8 @@ public final class JaegernautsNavXGyro extends AHRS {
 
     // Same thing as above, but counterclockwise reading instead
     private final double getDegreesCounterClockwise() { return 360 - getDegreesClockwise(); }
+<<<<<<< HEAD
+=======
+
+>>>>>>> df22047ee764779ca0535e960d0a4cff0f2ada11
 }
